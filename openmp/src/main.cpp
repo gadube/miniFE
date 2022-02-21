@@ -188,9 +188,9 @@ int main(int argc, char** argv) {
    long long int max_rss = 0;
 
 #ifdef HAVE_MPI
-   MPI_Reduce(&rank_rss, &global_rss, 1, 
+   MPI_Reduce(&rank_rss, &global_rss, 1,
 	MPI_LONG_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
-   MPI_Reduce(&rank_rss, &max_rss, 1, 
+   MPI_Reduce(&rank_rss, &max_rss, 1,
 	MPI_LONG_LONG, MPI_MAX, 0, MPI_COMM_WORLD);
    if (myproc == 0) {
 	doc.add("Global All-RSS (kB)", global_rss);
@@ -229,7 +229,7 @@ void add_params_to_yaml(YAML_Doc& doc, miniFE::Parameters& params)
     doc.get("Global Run Parameters")->add("mv_overlap_comm_comp", val);
   }
 #ifdef _OPENMP
-  doc.get("Global Run Parameters")->add("OpenMP Max Threads:", omp_get_max_threads());
+  doc.get("Global Run Parameters")->add("OpenMP Max Threads", omp_get_max_threads());
 #endif
 }
 
@@ -254,6 +254,9 @@ void add_configuration_to_yaml(YAML_Doc& doc, int numprocs, int numthreads)
   using_mpi = "yes";
 #endif
   doc.get("Build")->add("using MPI",using_mpi);
+  auto bigfoot_str = std::getenv("BIGFOOT_ALIGN");
+  auto bigfoot_align = (bigfoot_str != nullptr) ? atoi(bigfoot_str) : 0;
+  doc.get("Build")->add("using Bigfoot",bigfoot_align);
 }
 
 void add_timestring_to_yaml(YAML_Doc& doc)
@@ -273,4 +276,3 @@ void add_timestring_to_yaml(YAML_Doc& doc)
   std::string timestring = osstr.str();
   doc.add("Run Date/Time",timestring);
 }
-
