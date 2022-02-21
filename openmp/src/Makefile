@@ -12,13 +12,13 @@ MINIFE_MATRIX_TYPE = -DMINIFE_CSR_MATRIX
 
 #-----------------------------------------------------------------------
 
-CFLAGS = -O3 -fopenmp
+CFLAGS = -O3 -fopenmp -g
 CXXFLAGS = $(CFLAGS)
 
 CPPFLAGS = -I. -I../utils -I../fem $(MINIFE_TYPES) \
 	$(MINIFE_MATRIX_TYPE) \
-	-DHAVE_MPI -DMPICH_IGNORE_CXX_SEEK \
 	-DMINIFE_REPORT_RUSAGE
+	# -DHAVE_MPI -DMPICH_IGNORE_CXX_SEEK \
 
 LDFLAGS=$(CFLAGS)
 LIBS=
@@ -35,7 +35,7 @@ LIBS=
 #CXX=icpc
 #CC=icc
 
-CXX=mpicxx
-CC=mpicc
+CXX=clang++
+CC=clang++
 
 include make_targets
